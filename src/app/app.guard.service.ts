@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router';
+import * as _ from 'lodash';
 
 
 @Injectable({
@@ -7,7 +8,10 @@ import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from
 })
 export class AppGuardService implements CanActivate {
   auth = false;
-
+  user = {
+    name: 'zakuan',
+    roles: 'USER'
+  }
   constructor(
     private allowedRoles: string[],
     private router: Router
@@ -15,8 +19,9 @@ export class AppGuardService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, 
     state: RouterStateSnapshot): boolean {
-    if (this.auth) {
-      this.router.navigate(['/admin']);
+      const isExist = this.allowedRoles.includes(this.user.roles)  
+    if (!isExist) {
+      this.router.navigate(['/']);
     }
     
     return true;
